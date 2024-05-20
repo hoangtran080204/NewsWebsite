@@ -7,7 +7,7 @@ import './App.css';
 import Home from './pages/Home';
 function App() {
   return (
-    <Box width = '400px' m ='auto'>
+    <Box width = '1400px' m ='auto'>
       <Routes>
         <Route path = "/" element = {<Home/>} />
       </Routes>

@@ -1,20 +1,22 @@
 import React from 'react'
 
-import {Box} from '@mui/material';
-
+import {Box, Stack}  from '@mui/material';
+import ArticleCard from './ArticleCard';
 
 const SearchResults = ({articles}) => {
-  const name = articles[0]["author"];
-  const url = articles[0]["url"];
-  const description  = articles[0]["description"];
   return (
-    <div>
-        <p>{name}</p>
-        <p>{url}</p>
-        <p>{description}</p>
-    </div>
-    
-   
+    <Box mt="50px" p="20px">
+      <Stack direction = "row" sx={{ gap: '50px' }} flexWrap="wrap" justifyContent="center">
+        {articles.length > 0 ? ( // Check if articles array is not empty
+          
+          articles.map((article) => (
+            <ArticleCard article={article} />
+          ))
+        ) : (
+          <h2>Please enter keyword to search for articles.</h2>
+        )}
+      </Stack>
+    </Box>
  
   )
 }
