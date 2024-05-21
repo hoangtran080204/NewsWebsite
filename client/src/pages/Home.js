@@ -4,11 +4,12 @@ import SearchBar from '../components/SearchBar';
 import SearchResults from '../components/SearchResults';
 
 const Home = () => {
-   const [articles, setArticles] = useState([])
+   const [articles, setArticles] = useState([]);
+   const [searchMessage, setSearchMessage] = useState("Please enter a keyword to search for articles.");
    return (
     <div>
-      <SearchBar setArticles={setArticles} />
-      <SearchResults articles = {articles} />
+      <SearchBar setArticles={setArticles} setSearchMessage={setSearchMessage} />
+      <SearchResults articles = {articles} searchMessage={searchMessage} />
     </div>
   )
 }

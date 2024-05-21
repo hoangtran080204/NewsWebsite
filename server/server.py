@@ -18,10 +18,21 @@ newsapi = NewsApiClient(api_key=os.getenv("NEWS_API_KEY"))
 def search():
     if request.method == "GET":
         searched_term = request.args.get("q")
-        searched_articles = newsapi.get_everything(q=searched_term, language='en', sort_by='relevancy', page = 1)['articles']
-    
-    return jsonify(searched_articles)
 
+        try:
+            response = newsapi.get_everything(q=searched_term, language='en', sort_by='relevancy', page = 1)
+            # Check the response status from NewsAPI
+            if response['status'] == 'ok':
+                searched_articles = response['articles']
+                return jsonify(searched_articles)
+            elif response['status'] == 'error':
+                # Return specific error message from NewsAPI in case of failure
+                error_message = response['message']
+                return jsonify({"error": error_message}), 500
+
+        except Exception as e:
+            # Handle any exceptions that are not explicitly raised by NewsAPI
+            return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

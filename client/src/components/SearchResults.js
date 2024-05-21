@@ -2,7 +2,7 @@ import React from 'react'
 
 import ArticleCard from './ArticleCard';
 
-const SearchResults = ({articles}) => {
+const SearchResults = ({ articles, searchMessage }) => {
   return (
     <div className="results-container">
         <div className="results-stack">
@@ -11,7 +11,7 @@ const SearchResults = ({articles}) => {
                     <ArticleCard article={article} />
                 ))
             ) : (
-                    <h2>Please enter a keyword to search for articles.</h2>
+                    <h2>{searchMessage}</h2>
             )}
         </div>
     </div>

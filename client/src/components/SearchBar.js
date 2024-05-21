@@ -1,17 +1,27 @@
 import React, {useState} from 'react'
 
-const SearchBar = ({setArticles}) => {
+const SearchBar = ({setArticles,setSearchMessage}) => {
     const [userInput, setUserInput] = useState(""); //state variables to store user input
-    
     const handleSearch = async() => {
         if(userInput){
             //Flask API call to retrieve all articles containing keywords that match user input
-            const response = await fetch(`/search?q=${(userInput)}`, {
-                method: "GET",
-            });
-            const searched_articles = await response.json() 
-            console.log(searched_articles)
-            setArticles(searched_articles)
+            try{
+                const response = await fetch(`/search?q=${(userInput)}`, {
+                    method: "GET",
+                });
+
+                if (!response.ok) {
+                    const errorResponse = await response.json();
+                    throw new Error(errorResponse.error || 'Undefined Error');
+                }
+
+                const searched_articles = await response.json(); 
+                setArticles(searched_articles);
+
+            }catch(error){
+                setSearchMessage("Failed to search for articles. Please try again later.");
+            }
+            
         }
     }
   
