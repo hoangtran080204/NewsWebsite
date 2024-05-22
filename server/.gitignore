@@ -1,5 +1,5 @@
 #Venv folder
-/venv
+venv/
 
 #.env file
 .env
