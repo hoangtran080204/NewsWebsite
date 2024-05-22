@@ -14,7 +14,7 @@ app = Flask(__name__)
 newsapi = NewsApiClient(api_key=os.getenv("NEWS_API_KEY"))
 
 #API endpoint for handling search request based on user input
-@app.route("/search", methods = ["GET", "POST"])
+@app.route("/search", methods = ["GET"])
 def search():
     if request.method == "GET":
         searched_term = request.args.get("q")
