@@ -1,24 +1,22 @@
 /* Global styles */
 
 body {
-  font-family: 'Josefin Sans', sans-serif;
-  background-color: #FFFAFB;
+  font-family: "Josefin Sans", sans-serif;
+  background-color: #fffafb;
 }
 
 * {
   padding: 0px;
   margin: 0px;
   box-sizing: border-box;
-
 }
 
 /* Application container */
 
-.app{
-  width : 1400px;
-  margin : auto; /* Centers the app container */
+.app {
+  width: 1400px;
+  margin: auto; /* Centers the app container */
 }
-
 
 .search-bar-container {
   display: flex;
@@ -48,7 +46,7 @@ body {
 }
 
 .search-button {
-  background-color: #FF2625;
+  background-color: #ff2625;
   color: #fff;
   text-transform: none;
   width: 150px;
@@ -67,8 +65,8 @@ body {
   width: 400px;
   height: 480px;
   background: #fff;
-  border-top: 2px solid #FF2625;
-  border-bottom: 2px solid #FF2625;
+  border-top: 2px solid #ff2625;
+  border-bottom: 2px solid #ff2625;
   text-decoration: none;
   display: flex;
   justify-content: space-between;
@@ -90,7 +88,7 @@ body {
 
 .article-author {
   color: #fff;
-  background: #FFA9A9;
+  background: #ffa9a9;
   font-size: 14px;
   border-radius: 20px;
   text-transform: capitalize;
@@ -100,7 +98,7 @@ body {
 
 .article-source {
   color: #fff;
-  background: #FCC757; 
+  background: #fcc757;
   font-size: 14px;
   border-radius: 20px;
   text-transform: capitalize;
@@ -134,8 +132,6 @@ body {
 @media screen and (max-width: 1200px) {
   /* Styles applied when the viewport width is 1200px or less */
   .article-card {
-    width: calc((100% / 3) - 20px); 
+    width: calc((100% / 3) - 20px);
   }
-
-  
 }
