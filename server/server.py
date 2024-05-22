@@ -2,17 +2,15 @@ import logging
 from flask import Flask, request, jsonify
 from newsapi import NewsApiClient
 
-import os
-from dotenv import load_dotenv
+from config import ConfigFactory
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Init Flask App
+# Init Flask App with configuratioin
 app = Flask(__name__)
+app.config.from_object(ConfigFactory.factory())
+
 
 # Init News Api
-newsapi = NewsApiClient(api_key=os.getenv("NEWS_API_KEY"))
+newsapi = NewsApiClient(api_key=app.config['NEWS_API_KEY'])
 
 # Init logger
 logger = logging.getLogger(__name__)
@@ -40,9 +38,10 @@ def search():
 
         except Exception as e:
             # Handle any exceptions that are not explicitly raised by NewsAPI
-            logger.exception(f"Exception errors when calling newsapi.get_everything: {e}")
+            logger.exception(
+                f"Exception errors when calling newsapi.get_everything: {e}")
             return jsonify({"error": "API Request Failed."}), 500
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
