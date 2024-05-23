@@ -26,7 +26,11 @@ def search():
 
         try:
             response = newsapi.get_everything(
-                q=searched_term, language='en', sort_by='relevancy', page=1)
+                q=searched_term,
+                language="en",
+                sort_by="relevancy",
+                page=1,
+            )
             # Check the response status from NewsAPI
             if response['status'] == 'ok':
                 searched_articles = response['articles']
