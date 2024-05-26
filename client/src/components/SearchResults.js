@@ -1,22 +1,19 @@
-import React from 'react'
+import React from "react";
 
-import {Box} from '@mui/material';
+import ArticleCard from "./ArticleCard";
 
-
-const SearchResults = ({articles}) => {
-  const name = articles[0]["author"];
-  const url = articles[0]["url"];
-  const description  = articles[0]["description"];
+const SearchResults = ({ articles, searchMessage }) => {
   return (
-    <div>
-        <p>{name}</p>
-        <p>{url}</p>
-        <p>{description}</p>
+    <div className="results-container">
+      <div className="results-stack">
+        {articles.length > 0 ? (
+          articles.map((article) => <ArticleCard article={article} />)
+        ) : (
+          <h2>{searchMessage}</h2>
+        )}
+      </div>
     </div>
-    
-   
- 
-  )
-}
+  );
+};
 
-export default SearchResults
+export default SearchResults;

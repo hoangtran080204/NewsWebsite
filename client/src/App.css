@@ -1,41 +1,137 @@
-.App {
-  text-align: center;
+/* Global styles */
+
+body {
+  font-family: "Josefin Sans", sans-serif;
+  background-color: #fffafb;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Application container */
+
+.app {
+  width: 1400px;
+  margin: auto; /* Centers the app container */
 }
 
-
-
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.search-bar-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 30px;
+  padding: 20px;
+}
+
+/* Styling for search bar */
+
+.search-box {
+  position: relative;
+  margin-bottom: 72px;
+  margin-top: 50px;
+  width: 1000px;
+}
+
+.search-input {
+  width: 100%;
+  height: 70px;
+  font-weight: 700;
+  font-size: 20px;
+  border: none;
+  border-radius: 8px;
+  padding: 0 20px;
+}
+
+.search-button {
+  background-color: #ff2625;
+  color: #fff;
+  text-transform: none;
+  width: 150px;
+  height: 70px;
+  position: absolute;
+  right: 0; /* Aligned absolutely to the right of the search box*/
+  font-size: 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Styling for individual article card */
+
+.article-card {
+  width: 400px;
+  height: 480px;
+  background: #fff;
+  border-top: 2px solid #ff2625;
+  border-bottom: 2px solid #ff2625;
+  text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  padding-bottom: 10px;
+  transform: scale(1, 1);
+}
+
+.article-card img {
+  height: 326px;
+}
+
+.article-stack {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.article-author {
+  color: #fff;
+  background: #ffa9a9;
+  font-size: 14px;
+  border-radius: 20px;
+  text-transform: capitalize;
+  border: none;
+  padding: 5px 10px;
+}
+
+.article-source {
+  color: #fff;
+  background: #fcc757;
+  font-size: 14px;
+  border-radius: 20px;
+  text-transform: capitalize;
+  border: none;
+  padding: 5px 10px;
+}
+
+.article-title {
+  color: #000;
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  text-transform: capitalize;
+}
+
+/* Styling for search results */
+.results-container {
+  margin-top: 50px;
+  padding: 20px;
+}
+
+.results-stack {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  flex-wrap: wrap; /* Wrapping articles to display them line by line */
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+@media screen and (max-width: 1200px) {
+  /* Styles applied when the viewport width is 1200px or less */
+  .article-card {
+    width: calc((100% / 3) - 20px);
   }
 }
