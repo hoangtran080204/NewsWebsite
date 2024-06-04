@@ -25,6 +25,12 @@ class Config:
     DEBUG = False
     TESTING = False
     NEWS_API_KEY = environ.get('NEWS_API_KEY')
+    SQLALCHEMY_DATABASE_URI = environ.get('SQLALCHEMY_DATABASE_URI_KEY')
+    CELERY = {
+        'broker_url' : environ.get('BROKER_URL'),
+        'result_backend': environ.get('RESULT_BACKEND_URL'),
+        'task_ignore_result': True  
+    }
 
 
 class Development(Config):
