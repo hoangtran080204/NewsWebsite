@@ -10,5 +10,5 @@ class Article(Base):
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
     author = Column(String(255), nullable=True)
-    url = Column(String(255), unique=True, nullable=False)
-    urlToImage = Column(String(255), nullable=True)
+    url = Column(String(2048), unique=True, nullable=False)
+    urlToImage = Column(String(2048), nullable=True)

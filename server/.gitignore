@@ -3,3 +3,7 @@ venv/
 
 #.env file
 .env
+
+#Alembic folder and config
+alembic/
+alembic.ini
