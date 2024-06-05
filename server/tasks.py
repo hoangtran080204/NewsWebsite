@@ -29,46 +29,71 @@ engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 Base.metadata.create_all(engine)
 Session = sessionmaker(autocommit=False, bind=engine)
 
+def get_news_sources(language):
+    """
+    Helper function to fetch news sources from NewsAPI.
 
-@shared_task(ignore_result=False)
-def fetch_latest_news():
+    :param language: The language of the displayed articles by the source(e.g., 'en', 'fr', 'es')
+    :return: A comma-separated string of source IDs, or an empty string if no sources found
     """
-    Celery task to update the database with the latest news from NewsAPI
-    """
-    session = Session()
     try:
-        # Get all available sources from NewsAPI
         source_ids = []
         all_sources = newsapi.get_sources(
-            language='en',
+            language=language,
             country='us'
         )
-        for source in all_sources['sources']:
-            source_ids.append(source['id'])
-        sources_list = ', '.join(source_ids)
+        if all_sources['status'] == 'ok':
+            for source in all_sources['sources']:
+                source_ids.append(source['id'])
+            return ', '.join(source_ids)
+        else:
+            logger.warning(f"newsapi.get_sources has error: {all_sources}")
+            return ''
+    except Exception as e:
+        logger.exception(f"Exception error: {e}")
+        return ''
+    
+@shared_task(ignore_result=False)
+def fetch_latest_news(language, page_size):
+    """
+    Celery task to update the database with the latest daily news from NewsAPI
+
+    :param language: The language of the news articles (e.g., 'en', 'fr', 'es')
+    :param page_size: The number of articles to fetch (default/maximum: 100)
+    """
+
+    #Log information when starting celery task
+    log_prefix = f"fetch_latest_news language={language}, page_size={page_size}"
+    logger.info(f"{log_prefix} - Started")
+
+    session = Session()
+    try:
+        # Get all available sources from NewsAPI based on specific language
+        sources_list = get_news_sources(language)
 
         # Retrieve the latest articles from the available sources from NewsAPI
         response = newsapi.get_everything(
             sources=sources_list,
-            language='en',
             sort_by='publishedAt',
+            page_size=page_size,
             page=1,
         )
-        if response['status'] == 'ok':
-            searched_articles = response['articles']
-            for article in searched_articles:
-                article_entry = Article(
-                    title=article['title'],
-                    description=article['description'],
-                    author=article['author'],
-                    url=article['url'],
-                    urlToImage=article['urlToImage']
-                )
-                session.add(article_entry)
-            session.commit()
-        else:
-            # Logging specific error from NewsAPI in case of failure
+
+        if response['status'] != 'ok':
             logger.warning(f"newsapi.get_everything has error: {response}")
+            return
+        
+        searched_articles = response['articles']
+        for article in searched_articles:
+            article_entry = Article(
+                title=article['title'],
+                description=article['description'],
+                author=article['author'],
+                url=article['url'],
+                urlToImage=article['urlToImage']
+            )
+            session.add(article_entry)
+        session.commit()
 
     except Exception as e:
         logger.exception(f"Exception error: {e}")
@@ -80,9 +105,10 @@ def fetch_latest_news():
 
 # Configure celery beat to schedule periodic task
 celery.conf.beat_schedule = {
-    'fetch-latest-news-daily': {
+    'fetch-100-latest-english-news-daily': {
         'task': 'tasks.fetch_latest_news',
         'schedule': crontab(minute=0, hour=0),  # Run task at midnight every day
+        'kwargs': {'language': 'en', 'page_size': 100}
     },
 }
 
