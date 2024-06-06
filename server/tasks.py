@@ -89,6 +89,7 @@ def fetch_latest_news(language, page_size):
                 title=article['title'],
                 description=article['description'],
                 author=article['author'],
+                source_name= article['source']['name'],
                 url=article['url'],
                 urlToImage=article['urlToImage']
             )
