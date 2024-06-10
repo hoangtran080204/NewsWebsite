@@ -15,3 +15,21 @@ def celery_init_app(app: Flask) -> Celery:
     celery_app.set_default()
     app.extensions["celery"] = celery_app
     return celery_app
+
+def article_to_dict(article):
+    """
+    Convert an Article object to a matching format similar to the response object from NewsAPI.
+
+    :param article: Article object
+    :return: Dictionary representation of the article object
+    """
+    return {
+        "source": {
+            "name": article.source_name
+        },
+        "author": article.author,
+        "title": article.title,
+        "description": article.description,
+        "url": article.url,
+        "urlToImage": article.image_url
+    }
