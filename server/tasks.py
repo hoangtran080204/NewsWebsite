@@ -91,7 +91,7 @@ def fetch_latest_news(language, page_size):
                 author=article['author'],
                 source_name= article['source']['name'],
                 url=article['url'],
-                urlToImage=article['urlToImage']
+                image_url =article['urlToImage']
             )
             session.add(article_entry)
         session.commit()

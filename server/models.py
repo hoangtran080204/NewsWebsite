@@ -12,4 +12,4 @@ class Article(Base):
     author = Column(String(255), nullable=True)
     source_name = Column(String(255), nullable=True)
     url = Column(String(2048), unique=True, nullable=False)
-    urlToImage = Column(String(2048), nullable=True)
+    image_url = Column(String(2048), nullable=True)
