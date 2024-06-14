@@ -95,7 +95,7 @@ def search():
         searched_term = request.args.get("q")
         db_result = get_articles_from_database(searched_term)
         
-        #Return database query if not empty, else return API call
+        # Return database query if not empty, else return API call
         if db_result.get_json():
             return db_result
         else:
