@@ -33,3 +33,34 @@ def article_to_dict(article):
         "url": article.url,
         "urlToImage": article.image_url
     }
+
+def format_response(status, article_count, article_list):
+    """
+    Format a base structure for API response
+
+    :param status: status message
+    :param article_count: total count of returned articles
+    :param article_list: list of returned articles
+    :return: Dictionary format for API response
+    """
+
+    #Default page size from newsapi
+    page_size = 100
+    #Default current_page from newsapi for developer plan
+    current_page = 1
+
+    total_pages = (article_count + page_size - 1) // page_size
+    has_next_page = current_page < total_pages
+
+    response = {
+            "status" : status,
+            "article_count" : article_count,
+            "article_list" : article_list,
+            "pagination": {
+                "current_page" : current_page,
+                "total_pages" : total_pages,
+                "has_next_page" : has_next_page
+            }
+    }
+
+    return response

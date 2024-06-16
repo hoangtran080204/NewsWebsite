@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker
 
 from config import ConfigFactory
 from models import Article
-from utils import article_to_dict
+from utils import article_to_dict, format_response
 # Init Flask App with configuratioin
 app = Flask(__name__)
 app.config.from_object(ConfigFactory.factory())
@@ -47,11 +47,12 @@ def get_articles_from_database(searched_term):
         articles_list = []
         for article in results:
             articles_list.append(article_to_dict(article))
-        return jsonify(articles_list)
+        db_response = format_response("ok", len(articles_list), articles_list)
+        return jsonify(db_response)
     
     except Exception as e:
         logger.exception(f"Database errors: {e}")
-        return jsonify([])
+        return jsonify({"status": "error", "message": "Database Query Failed."})
     
     finally:
         # Ensure the session is closed properly
@@ -72,18 +73,18 @@ def get_articles_from_newsapi(searched_term):
             page=1,
         )
         if response['status'] == 'ok':
-            searched_articles = response['articles']
-            return jsonify(searched_articles)
+            api_response = format_response(response['status'], response['totalResults'], response['articles'])
+            return jsonify(api_response)
         else:
             # Logging specific error from NewsAPI in case of failure
             logger.warning(f"newsapi.get_everything has error: {response}")
-            return jsonify({"error": "API Request Failed."}), 500
+            return jsonify({"status": "error", "message": "API Request Failed."}), 500
 
     except Exception as e:
         # Handle any exceptions that are not explicitly raised by NewsAPI
         logger.exception(
             f"Exception errors when calling newsapi.get_everything: {e}")
-        return jsonify({"error": "API Request Failed."}), 500
+        return jsonify({"status": "error", "message": "API Request Failed."}), 500
     
 @app.route("/search", methods=["GET"])
 def search():
@@ -95,8 +96,11 @@ def search():
         searched_term = request.args.get("q")
         db_result = get_articles_from_database(searched_term)
         
+        # Extract JSON data from db_result
+        db_json = db_result.json
+        
         # Return database query if not empty, else return API call
-        if db_result.get_json():
+        if db_json['status'] == 'ok' & db_json['article_count'] > 0:
             return db_result
         else:
             logger.info("No matching articles from database query")
@@ -107,3 +111,4 @@ def search():
 
 if __name__ == "__main__":
     app.run()
+    
