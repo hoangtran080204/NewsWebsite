@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from config import ConfigFactory
 from models import Article
 from utils import article_to_dict, format_response
-# Init Flask App with configuratioin
+# Init Flask App with configuration
 app = Flask(__name__)
 app.config.from_object(ConfigFactory.factory())
 
@@ -100,7 +100,7 @@ def search():
         db_json = db_result.json
         
         # Return database query if not empty, else return API call
-        if db_json['status'] == 'ok' & db_json['article_count'] > 0:
+        if db_json['status'] == 'ok' and db_json['article_count'] > 0:
             return db_result
         else:
             logger.info("No matching articles from database query")

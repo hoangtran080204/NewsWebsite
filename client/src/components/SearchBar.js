@@ -16,7 +16,7 @@ const SearchBar = ({ setArticles, setSearchMessage }) => {
         }
 
         const searched_articles = await response.json();
-        setArticles(searched_articles);
+        setArticles(searched_articles["article_list"]);
       } catch (error) {
         setSearchMessage(
           "Failed to search for articles. Please try again later."
