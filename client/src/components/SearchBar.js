@@ -7,7 +7,7 @@ const SearchBar = ({ setArticles, setSearchMessage }) => {
       //Flask API call to retrieve all articles containing keywords that match user input
       try {
         const response = await fetch(
-          `http://167.172.156.95/search?q=${userInput}`,
+          `https://kevintrantutorial.xyz/search?q=${userInput}`,
           {
             method: "GET",
           }
