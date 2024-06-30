@@ -3,14 +3,14 @@ from flask import Flask, request, jsonify
 from newsapi import NewsApiClient
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker
-
+from flask_cors import CORS
 from config import ConfigFactory
 from models import Article
 from utils import article_to_dict, format_response
 # Init Flask App with configuration
 app = Flask(__name__)
 app.config.from_object(ConfigFactory.factory())
-
+CORS(app)
 
 # Init News Api
 newsapi = NewsApiClient(api_key=app.config['NEWS_API_KEY'])
