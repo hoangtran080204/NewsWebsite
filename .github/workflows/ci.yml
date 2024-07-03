@@ -28,6 +28,7 @@ jobs:
           HOST: ${{ secrets.DROPLET_IP }}
         run: |
           ssh root@$HOST << EOF
+            set -e
             cd NewsWebsite
             git pull origin main
             cd server
