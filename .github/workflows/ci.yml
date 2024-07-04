@@ -32,6 +32,6 @@ jobs:
             cd NewsWebsite
             git pull origin main
             cd server
-            docker compose down
-            docker compose up -d --build
+            docker compose pull
+            docker compose up -d --build --remove-orphans
           EOF
