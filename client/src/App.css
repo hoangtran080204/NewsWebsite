@@ -129,6 +129,123 @@ body {
   justify-content: center;
 }
 
+/* Styling for navbar component */
+
+.navbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 65px;
+  margin-top: 20px;
+  position: relative;
+}
+
+/* Navbar title styles */
+.navbar-title {
+  font-size: 36px;
+  margin: auto;
+}
+
+/* Navbar links container */
+.navbar-links {
+  display: flex;
+  gap: 40px;
+  font-size: 24px;
+  position: absolute;
+  right: 65px;
+}
+
+/* Navbar link styles */
+.nav-link {
+  text-decoration: none;
+  color: #3a1212;
+}
+
+.nav-link:hover {
+  border-bottom: 3px solid #ff2625;
+}
+
+/* Styling for login/sign up card component */
+
+.login-signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 100px); /* Adjust based on your navbar height */
+  background-color: #fffafb;
+  padding: 20px;
+}
+
+.form-title {
+  font-size: 30px;
+  color: #333;
+}
+
+.login-signup-form {
+  background-color: white;
+  padding: 32px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  height: 450px; /* Set a fixed height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.input-group {
+  margin-bottom: 16px;
+}
+
+.user-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-top: 30px;
+}
+
+.user-input:focus {
+  outline: none;
+  border-color: #1a73e8;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.login-button,
+.signup-button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.login-button {
+  background-color: #1a73e8;
+  color: white;
+  margin-right: 8px;
+}
+
+.signup-button {
+  background-color: #34a853;
+  color: white;
+  margin-left: 8px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
 @media screen and (max-width: 1200px) {
   /* Styles applied when the viewport width is 1200px or less */
   .article-card {

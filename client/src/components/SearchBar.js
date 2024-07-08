@@ -30,7 +30,6 @@ const SearchBar = ({ setArticles, setSearchMessage }) => {
 
   return (
     <div className="search-bar-container">
-      <h1>News Website</h1>
       <div className="search-box">
         <input
           className="search-input"
