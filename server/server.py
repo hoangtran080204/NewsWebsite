@@ -3,14 +3,19 @@ from flask import Flask, request, jsonify
 from newsapi import NewsApiClient
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
 from config import ConfigFactory
-from models import Article
+from models import Article, User
 from utils import article_to_dict, format_response
 # Init Flask App with configuration
 app = Flask(__name__)
 app.config.from_object(ConfigFactory.factory())
 CORS(app)
+
+# Init JWTManager 
+jwt = JWTManager(app)
 
 # Init News Api
 newsapi = NewsApiClient(api_key=app.config['NEWS_API_KEY'])
@@ -86,12 +91,18 @@ def get_articles_from_newsapi(searched_term):
             f"Exception errors when calling newsapi.get_everything: {e}")
         return jsonify({"status": "error", "message": "API Request Failed."}), 500
     
+
 @app.route("/search", methods=["GET"])
+@jwt_required
 def search():
     """
     API endpoint for handling search request based on user input
     
     """
+    # Get the identity of the current user
+    current_user = get_jwt_identity() 
+    logger.info(f"Search request from user: {current_user}")
+
     if request.method == "GET":
         searched_term = request.args.get("q")
         db_result = get_articles_from_database(searched_term)
@@ -106,8 +117,47 @@ def search():
             logger.info("No matching articles from database query")
             return get_articles_from_newsapi(searched_term)
 
+@app.route('/signup', methods=['POST'])
+def signup():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
 
+    if not username or not password:
+        return jsonify({"status": "error", "message": "Both username and password are required."}), 400
 
+    session = Session()
+    existing_user = session.query(User).filter_by(username=username).first()
+    
+    if existing_user:
+        session.close()
+        return jsonify({"status": "error", "message": "Sorry, this username already exists."}), 500
+
+    hashed_password = generate_password_hash(password)
+    new_user = User(username=username, password=hashed_password)
+    session.add(new_user)
+    session.commit()
+    session.close()
+
+    # Create and return access token
+    access_token = create_access_token(identity=username)
+    return jsonify({"status": "ok", "message": "Account created successfully", "access_token": access_token}), 201
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    session = Session()
+    user = session.query(User).filter_by(username=username).first()
+    session.close()
+
+    if user and check_password_hash(user.password, password):
+        access_token = create_access_token(identity=username)
+        return jsonify({"status": "ok", "message": "Login successful", "access_token": access_token}), 200
+    else:
+        return jsonify({"status": "error", "message": "Invalid username or password"}), 401
 
 if __name__ == "__main__":
     app.run()
