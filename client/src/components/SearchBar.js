@@ -6,10 +6,19 @@ const SearchBar = ({ setArticles, setSearchMessage }) => {
     if (userInput) {
       //Flask API call to retrieve all articles containing keywords that match user input
       try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          setSearchMessage("You must be logged in to search.");
+          return;
+        }
+
         const response = await fetch(
-          `https://kevintrantutorial.xyz/search?q=${userInput}`,
+          `http://localhost:8080/search?q=${userInput}`,
           {
             method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
