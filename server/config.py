@@ -31,6 +31,8 @@ class Config:
         'result_backend': environ.get('RESULT_BACKEND_URL'),
         'task_ignore_result': True  
     }
+    
+    JWT_SECRET_KEY = environ.get('JWT_SECRET_KEY')
 
 
 class Development(Config):
