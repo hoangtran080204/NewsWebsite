@@ -3,17 +3,51 @@ import React, { useState } from "react";
 const LoginSignupForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // TODO: API call (GET) for login
-    console.log("Login:", username, password);
+    try {
+      const response = await fetch("http://localhost:8080/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem("token", data.access_token);
+        setMessage(data.message);
+      } else {
+        setMessage(data.message || "An error occurred");
+      }
+    } catch (error) {
+      setMessage("An error occurred");
+    }
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    // TODO: API call (POST) for signup
-    console.log("Signup:", username, password);
+
+    try {
+      const response = await fetch("http://localhost:8080/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem("token", data.access_token);
+        setMessage(data.message);
+      } else {
+        setMessage(data.message || "An error occurred");
+      }
+    } catch (error) {
+      setMessage("An error occurred");
+    }
   };
 
   return (
@@ -38,7 +72,9 @@ const LoginSignupForm = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          {message && <p className="confirmation-message">{message}</p>}
         </div>
+
         <div className="button-group">
           <button className="login-button" onClick={handleLogin}>
             Login

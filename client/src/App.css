@@ -213,6 +213,13 @@ body {
   border-color: #1a73e8;
 }
 
+.confirmation-message {
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fa8072;
+}
+
 .button-group {
   display: flex;
   justify-content: space-between;
