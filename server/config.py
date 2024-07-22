@@ -1,6 +1,6 @@
 from os import environ, path
 from dotenv import load_dotenv, find_dotenv
-
+from datetime import timedelta
 
 basedir = path.abspath(path.dirname(__file__))
 # Load environment variables from .env
@@ -33,6 +33,8 @@ class Config:
     }
     
     JWT_SECRET_KEY = environ.get('JWT_SECRET_KEY')
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=30)  # 30 minutes
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=1)  # 1 day
 
 
 class Development(Config):

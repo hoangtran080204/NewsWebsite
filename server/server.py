@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 from newsapi import NewsApiClient
 from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import sessionmaker
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
 from config import ConfigFactory
@@ -139,9 +139,10 @@ def signup():
     session.commit()
     session.close()
 
-    # Create and return access token
+    # Create and return access and refresh token
     access_token = create_access_token(identity=username)
-    return jsonify({"status": "ok", "message": "Account created successfully", "access_token": access_token}), 201
+    refresh_token = create_refresh_token(identity=username)
+    return jsonify({"status": "ok", "message": "Account created successfully", "access_token": access_token, "refresh_token": refresh_token}), 201
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -155,9 +156,12 @@ def login():
 
     if user and check_password_hash(user.password, password):
         access_token = create_access_token(identity=username)
-        return jsonify({"status": "ok", "message": "Login successful", "access_token": access_token}), 200
+        refresh_token = create_refresh_token(identity=username)
+        return jsonify({"status": "ok", "message": "Login successful", "access_token": access_token, "refresh_token":refresh_token}), 200
     else:
         return jsonify({"status": "error", "message": "Invalid username or password"}), 401
+    
+
 
 if __name__ == "__main__":
     app.run()
