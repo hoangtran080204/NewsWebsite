@@ -161,7 +161,18 @@ def login():
     else:
         return jsonify({"status": "error", "message": "Invalid username or password"}), 401
     
+@app.route('/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh():
+    """
+    API endpoint to refresh the access token using a valid refresh token.
 
+    :return: JSON response with the new access token
+    """
+    current_user = get_jwt_identity()
+    access_token = create_access_token(identity=current_user)
+    
+    return jsonify({"status" : "ok", "access_token" : access_token}), 201
 
 if __name__ == "__main__":
     app.run()
