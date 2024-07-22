@@ -93,7 +93,7 @@ def get_articles_from_newsapi(searched_term):
     
 
 @app.route("/search", methods=["GET"])
-@jwt_required
+@jwt_required()
 def search():
     """
     API endpoint for handling search request based on user input
