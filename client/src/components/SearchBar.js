@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { apiUrl } from "../constants/Config";
 const SearchBar = ({ setArticles, setSearchMessage }) => {
   const [userInput, setUserInput] = useState(""); //state variables to store user input
   const handleSearch = async () => {
@@ -12,15 +12,12 @@ const SearchBar = ({ setArticles, setSearchMessage }) => {
           return;
         }
 
-        const response = await fetch(
-          `http://localhost:8080/search?q=${userInput}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(`${apiUrl}/search?q=${userInput}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (!response.ok) {
           const errorResponse = await response.json();

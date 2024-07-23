@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-
+import { apiUrl } from "../constants/Config";
 const LoginSignupForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const apiUrl = process.env.REACT_APP_API_URL;
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
