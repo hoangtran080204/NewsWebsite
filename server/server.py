@@ -161,7 +161,7 @@ def login():
     else:
         return jsonify({"status": "error", "message": "Invalid username or password"}), 401
     
-@app.route('/refresh', methods=['POST'])
+@app.route('/refresh-token', methods=['POST'])
 @jwt_required(refresh=True)
 def refresh():
     """
