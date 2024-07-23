@@ -2,12 +2,40 @@ import React, { useState } from "react";
 import { apiUrl } from "../constants/Config";
 const SearchBar = ({ setArticles, setSearchMessage }) => {
   const [userInput, setUserInput] = useState(""); //state variables to store user input
+
+  const refreshAccessToken = async () => {
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (!refreshToken) {
+        throw new Error("No refresh token available");
+      }
+
+      const response = await fetch(`${apiUrl}/refresh-token`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to refresh access token");
+      }
+
+      const data = await response.json();
+      localStorage.setItem("accessToken", data.access_token);
+      return data.access_token;
+    } catch (error) {
+      console.error("Error refreshing access token:", error);
+      throw error;
+    }
+  };
+
   const handleSearch = async () => {
     if (userInput) {
       //Flask API call to retrieve all articles containing keywords that match user input
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
+        const accessToken = localStorage.getItem("accessToken");
+        if (!accessToken) {
           setSearchMessage("You must be logged in to search.");
           return;
         }
@@ -15,9 +43,25 @@ const SearchBar = ({ setArticles, setSearchMessage }) => {
         const response = await fetch(`${apiUrl}/search?q=${userInput}`, {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         });
+
+        if (response.status === 401) {
+          // If the access token is expired, refresh it
+          try {
+            token = await refreshAccessToken();
+            response = await fetch(`${apiUrl}/search?q=${userInput}`, {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+          } catch (error) {
+            setSearchMessage("You are logged out. Please log in again.");
+            return;
+          }
+        }
 
         if (!response.ok) {
           const errorResponse = await response.json();

@@ -16,7 +16,8 @@ const LoginSignupForm = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem("token", data.access_token);
+        localStorage.setItem("accessToken", data.access_token);
+        localStorage.setItem("refreshToken", data.refresh_token);
         setMessage(data.message);
       } else {
         setMessage(data.message || "An error occurred");
@@ -39,7 +40,8 @@ const LoginSignupForm = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem("token", data.access_token);
+        localStorage.setItem("accessToken", data.access_token);
+        localStorage.setItem("refreshToken", data.refresh_token);
         setMessage(data.message);
       } else {
         setMessage(data.message || "An error occurred");
