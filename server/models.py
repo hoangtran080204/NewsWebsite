@@ -13,3 +13,10 @@ class Article(Base):
     source_name = Column(String(255), nullable=True)
     url = Column(String(2048), unique=True, nullable=False)
     image_url = Column(String(2048), nullable=True)
+
+class User(Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String(255), unique=True, nullable=False)
+    password = Column(String(255), nullable=False)
