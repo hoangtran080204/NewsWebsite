@@ -34,13 +34,13 @@ const SearchBar = ({ setArticles, setSearchMessage }) => {
     if (userInput) {
       //Flask API call to retrieve all articles containing keywords that match user input
       try {
-        const accessToken = localStorage.getItem("accessToken");
+        let accessToken = localStorage.getItem("accessToken");
         if (!accessToken) {
           setSearchMessage("You must be logged in to search.");
           return;
         }
 
-        const response = await fetch(`${apiUrl}/search?q=${userInput}`, {
+        let response = await fetch(`${apiUrl}/search?q=${userInput}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -50,11 +50,11 @@ const SearchBar = ({ setArticles, setSearchMessage }) => {
         if (response.status === 401) {
           // If the access token is expired, refresh it
           try {
-            token = await refreshAccessToken();
+            accessToken = await refreshAccessToken();
             response = await fetch(`${apiUrl}/search?q=${userInput}`, {
               method: "GET",
               headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${accessToken}`,
               },
             });
           } catch (error) {
